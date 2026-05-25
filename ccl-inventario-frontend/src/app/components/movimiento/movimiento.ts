@@ -29,9 +29,12 @@ export class MovimientoComponent implements OnInit {
   }
 
   registrar() {
-    if (!this.productoId || !this.tipo || !this.cantidad || this.cantidad <= 0) {
-      this.error = 'Todos los campos son obligatorios y la cantidad debe ser mayor a 0';
+    if (!this.productoId || !this.tipo || !this.cantidad) {
+      this.error = 'Todos los campos son obligatorios.';
       return;
+    }
+    if(this.cantidad <= 0){
+      this.error = 'La cantidad del producto debe ser mayor a 0.';
     }
 
     this.cargando = true;
