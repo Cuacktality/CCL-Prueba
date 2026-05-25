@@ -27,11 +27,12 @@ public class ProductController : ControllerBase {
         var producto = await _db.Productos.FindAsync(request.ProductoId);
 
         if (producto == null) return NotFound(new { message = "Producto no encontrado" });
-        if (request.Tipo == "salida" && producto.Cantidad < request.Cantidad) return BadRequest(new { message = "Stock insuficiente para realizar la salida" });
+        if (request.Tipo == "salida" && producto.Cantidad < request.Cantidad) 
+            return BadRequest(new { message = "Stock Insuficiente. No se puede realizar la operación" });
 
         if (request.Tipo == "entrada") producto.Cantidad += request.Cantidad;
         else if (request.Tipo == "salida") producto.Cantidad -= request.Cantidad;
-        else return BadRequest(new { message = "Tipo debe ser 'entrada' o 'salida'" });
+        else return BadRequest(new { message = "Tipo debe ser 'ENTRADA' o 'SALIDA'" });
 
         await _db.SaveChangesAsync();
 

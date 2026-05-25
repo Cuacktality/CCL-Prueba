@@ -1,1 +1,74 @@
-<p>inventario works!</p>
+<div *ngIf="toast" [class]="'toast toast-' + toast.tipo">
+  {{ toast.mensaje }}
+</div>
+
+<div class="dashboard">
+  <div class="topbar">
+    <h1>CCL Inventario</h1>
+    <button class="btn-danger" (click)="cerrarSesion()">Cerrar Sesión</button>
+  </div>
+
+  <div class="panels">
+    <div class="panel">
+      <h2>Inventario de Productos</h2>
+      <p *ngIf="cargando">Cargando...</p>
+      <p class="error" *ngIf="errorInventario">{{ errorInventario }}</p>
+
+      <table *ngIf="!cargando && !errorInventario">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of productos">
+            <td>{{ p.id }}</td>
+            <td>{{ p.nombre }}</td>
+            <td>{{ p.cantidad }}</td>
+            <td>
+              <span [class]="p.cantidad === 0 ? 'badge-sin-stock' : 'badge-en-stock'">
+                {{ p.cantidad === 0 ? 'Sin stock' : 'Disponible' }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel panel-form">
+      <h2>Registrar Movimiento</h2>
+      <div class="card">
+        <div class="form-group">
+          <label>Producto *</label>
+          <select [(ngModel)]="productoId">
+            <option [ngValue]="null" disabled>Seleccione un producto</option>
+            <option *ngFor="let p of productos" [value]="p.id">
+              {{ p.nombre }} (stock: {{ p.cantidad }})
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Tipo de movimiento *</label>
+          <select [(ngModel)]="tipo">
+            <option value="" disabled>Seleccione el tipo de movimiento</option>
+            <option value="entrada">Entrada</option>
+            <option value="salida">Salida</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Cantidad *</label>
+          <input type="number" [(ngModel)]="cantidad" placeholder="0" min="1" />
+        </div>
+
+        <button (click)="registrar()" [disabled]="registrando">
+          {{ registrando ? 'Registrando...' : 'Registrar Movimiento' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
